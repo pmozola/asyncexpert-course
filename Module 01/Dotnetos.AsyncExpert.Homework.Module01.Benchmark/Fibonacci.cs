@@ -6,6 +6,7 @@ namespace Dotnetos.AsyncExpert.Homework.Module01.Benchmark
 {
     [DisassemblyDiagnoser(exportCombinedDisassemblyReport: true)]
     [NativeMemoryProfiler]
+    [MemoryDiagnoser]
     public class FibonacciCalc
     {
         // HOMEWORK:
@@ -28,14 +29,29 @@ namespace Dotnetos.AsyncExpert.Homework.Module01.Benchmark
         [ArgumentsSource(nameof(Data))]
         public ulong RecursiveWithMemoization(ulong n)
         {
-            return 0;
+            ulong number = n - 1; //Need to decrement by 1 since we are starting from 0  
+            ulong[] Fib = new ulong[number + 1];
+            Fib[0] = 0;
+            Fib[1] = 1;
+            for (ulong i = 2; i <= number; i++)
+            {
+                Fib[i] = Fib[i - 2] + Fib[i - 1];
+            }
+            return Fib[number];
         }
         
         [Benchmark]
         [ArgumentsSource(nameof(Data))]
         public ulong Iterative(ulong n)
         {
-            return 0;
+            ulong a = 0, b = 1, c = 0;
+            for (ulong i = 2; i < n; i++)
+            {
+                c = a + b;
+                a = b;
+                b = c;
+            }
+            return c;
         }
 
         public IEnumerable<ulong> Data()
